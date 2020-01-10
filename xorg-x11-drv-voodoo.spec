@@ -5,24 +5,22 @@
 Summary:   Xorg X11 voodoo video driver
 Name:      xorg-x11-drv-voodoo
 Version:   1.2.5
-Release:   3%{?dist}
+Release:   10%{?dist}
 URL:       http://www.x.org
 License:   MIT
 Group:     User Interface/X Hardware Support
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Source0: ftp://ftp.x.org/pub/individual/driver/%{tarball}-%{version}.tar.bz2
-Source1: voodoo.xinf
 Source2: make-git-snapshot.sh
 Source3: commitid
 
 ExcludeArch: s390 s390x
 
 BuildRequires: xorg-x11-server-devel >= 1.10.99.902
+BuildRequires: autoconf automake libtool
 
-Requires:  hwdata
-Requires:  Xorg %(xserver-sdk-abi-requires ansic)
-Requires:  Xorg %(xserver-sdk-abi-requires videodrv)
+Requires: Xorg %(xserver-sdk-abi-requires ansic)
+Requires: Xorg %(xserver-sdk-abi-requires videodrv)
 
 %description 
 X.Org X11 voodoo video driver.
@@ -31,6 +29,7 @@ X.Org X11 voodoo video driver.
 %setup -q -n %{tarball}-%{version}
 
 %build
+autoreconf -vif
 %configure --disable-static
 make
 
@@ -38,9 +37,6 @@ make
 rm -rf $RPM_BUILD_ROOT
 
 make install DESTDIR=$RPM_BUILD_ROOT
-
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/hwdata/videoaliases
-install -m 0644 %{SOURCE1} $RPM_BUILD_ROOT%{_datadir}/hwdata/videoaliases/
 
 # FIXME: Remove all libtool archives (*.la) from modules directory.  This
 # should be fixed in upstream Makefile.am or whatever.
@@ -52,24 +48,89 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %{driverdir}/voodoo_drv.so
-%{_datadir}/hwdata/videoaliases/voodoo.xinf
 %{_mandir}/man4/voodoo.4*
 
 %changelog
-* Tue Aug 29 2012 Jerome Glisse <jglisse@redhat.com> 1.2.5-3
-- Resolves: #835265
+* Mon Apr 28 2014 Adam Jackson <ajax@redhat.com> - 1.2.5-10
+- Fix rhel arch list
 
-* Wed Aug 22 2012 airlied@redhat.com - 1.2.5-2
-- rebuild for server ABI requires
+* Sun Aug 04 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.2.5-9
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
-* Mon Aug 06 2012 Jerome Glisse <jglisse@redhat.com> 1.2.5-1
-- latest upstream release 1.2.5
+* Thu Mar 07 2013 Dave Airlie <airlied@redhat.com> 1.2.5-8
+- autoconf for aarch64
 
-* Tue Jun 28 2011 Ben Skeggs <bskeggs@redhat.com> 1.2.4-1
-- upstream release 1.2.4
+* Thu Mar 07 2013 Peter Hutterer <peter.hutterer@redhat.com> - 1.2.5-7
+- require xorg-x11-server-devel, not -sdk
 
-* Mon Nov 30 2009 Dennis Gregorovic <dgregor@redhat.com> - 1.2.3-1.1
-- Rebuilt for RHEL 6
+* Thu Mar 07 2013 Peter Hutterer <peter.hutterer@redhat.com> - 1.2.5-6
+- ABI rebuild
+
+* Fri Feb 15 2013 Peter Hutterer <peter.hutterer@redhat.com> - 1.2.5-5
+- ABI rebuild
+
+* Fri Feb 15 2013 Peter Hutterer <peter.hutterer@redhat.com> - 1.2.5-4
+- ABI rebuild
+
+* Thu Jan 10 2013 Adam Jackson <ajax@redhat.com> - 1.2.5-3
+- ABI rebuild
+
+* Sun Jul 22 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.2.5-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
+* Wed Jul 18 2012 Dave Airlie <airlied@redhat.com> 1.2.5-1
+- voodoo 1.2.5
+
+* Thu Apr 05 2012 Adam Jackson <ajax@redhat.com> - 1.2.4-15
+- RHEL arch exclude updates
+
+* Sat Feb 11 2012 Peter Hutterer <peter.hutterer@redhat.com> - 1.2.4-14
+- ABI rebuild
+
+* Fri Feb 10 2012 Peter Hutterer <peter.hutterer@redhat.com> - 1.2.4-13
+- ABI rebuild
+
+* Tue Jan 24 2012 Peter Hutterer <peter.hutterer@redhat.com> - 1.2.4-12
+- ABI rebuild
+
+* Wed Jan 04 2012 Peter Hutterer <peter.hutterer@redhat.com> - 1.2.4-11
+- Rebuild for server 1.12
+
+* Fri Dec 16 2011 Adam Jackson <ajax@redhat.com> - 1.2.4-10
+- Drop xinf file
+
+* Mon Nov 14 2011 Adam Jackson <ajax@redhat.com> - 1.2.4-9
+- ABI rebuild
+
+* Wed Nov 09 2011 ajax <ajax@redhat.com> - 1.2.4-8
+- ABI rebuild
+
+* Thu Aug 18 2011 Adam Jackson <ajax@redhat.com> - 1.2.4-7
+- Rebuild for xserver 1.11 ABI
+
+* Wed May 11 2011 Peter Hutterer <peter.hutterer@redhat.com> - 1.2.4-6
+- Rebuild for server 1.11
+
+* Mon Feb 28 2011 Peter Hutterer <peter.hutterer@redhat.com> - 1.2.4-5
+- Rebuild for server 1.10
+
+* Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.2.4-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
+* Thu Dec 02 2010 Peter Hutterer <peter.hutterer@redhat.com> - 1.2.4-3
+- Rebuild for server 1.10
+
+* Wed Oct 27 2010 Adam Jackson <ajax@redhat.com> 1.2.4-2
+- Add ABI requires magic (#542742)
+
+* Mon Jul 05 2010 Dave Airlie <airlied@redhat.com> 1.2.4-1
+- build voodoo latest for server 1.9
+
+* Mon Jul 05 2010 Peter Hutterer <peter.hutterer@redhat.com> - 1.2.3-3
+- rebuild for X Server 1.9
+
+* Thu Jan 21 2010 Peter Hutterer <peter.hutterer@redhat.com> - 1.2.3-2
+- Rebuild for server 1.8
 
 * Tue Aug 04 2009 Dave Airlie <airlied@redhat.com> 1.2.3-1
 - voodoo 1.2.3
