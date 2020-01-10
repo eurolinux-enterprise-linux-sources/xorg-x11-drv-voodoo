@@ -5,7 +5,7 @@
 Summary:   Xorg X11 voodoo video driver
 Name:      xorg-x11-drv-voodoo
 Version:   1.2.5
-Release:   10%{?dist}
+Release:   11%{?dist}
 URL:       http://www.x.org
 License:   MIT
 Group:     User Interface/X Hardware Support
@@ -13,6 +13,8 @@ Group:     User Interface/X Hardware Support
 Source0: ftp://ftp.x.org/pub/individual/driver/%{tarball}-%{version}.tar.bz2
 Source2: make-git-snapshot.sh
 Source3: commitid
+
+Patch0: 0001-don-t-use-PCITAG-in-struct-anymore.patch
 
 ExcludeArch: s390 s390x
 
@@ -27,6 +29,7 @@ X.Org X11 voodoo video driver.
 
 %prep
 %setup -q -n %{tarball}-%{version}
+%patch0 -p1
 
 %build
 autoreconf -vif
@@ -51,6 +54,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man4/voodoo.4*
 
 %changelog
+* Wed Nov 11 2015 Adam Jackson <ajax@redhat.com> 1.2.5-11
+- Rebuild for server 1.17
+
 * Mon Apr 28 2014 Adam Jackson <ajax@redhat.com> - 1.2.5-10
 - Fix rhel arch list
 
