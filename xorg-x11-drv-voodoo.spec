@@ -4,8 +4,8 @@
 
 Summary:   Xorg X11 voodoo video driver
 Name:      xorg-x11-drv-voodoo
-Version:   1.2.4
-Release:   1%{?dist}
+Version:   1.2.5
+Release:   3%{?dist}
 URL:       http://www.x.org
 License:   MIT
 Group:     User Interface/X Hardware Support
@@ -18,7 +18,7 @@ Source3: commitid
 
 ExcludeArch: s390 s390x
 
-BuildRequires: xorg-x11-server-sdk >= 1.4.99.1
+BuildRequires: xorg-x11-server-devel >= 1.10.99.902
 
 Requires:  hwdata
 Requires:  Xorg %(xserver-sdk-abi-requires ansic)
@@ -56,6 +56,15 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man4/voodoo.4*
 
 %changelog
+* Tue Aug 29 2012 Jerome Glisse <jglisse@redhat.com> 1.2.5-3
+- Resolves: #835265
+
+* Wed Aug 22 2012 airlied@redhat.com - 1.2.5-2
+- rebuild for server ABI requires
+
+* Mon Aug 06 2012 Jerome Glisse <jglisse@redhat.com> 1.2.5-1
+- latest upstream release 1.2.5
+
 * Tue Jun 28 2011 Ben Skeggs <bskeggs@redhat.com> 1.2.4-1
 - upstream release 1.2.4
 
